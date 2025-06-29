@@ -1,4 +1,4 @@
-from datasets import dataset_factory
+from datasets_llamarec import dataset_factory
 
 from .lru import *
 from .llm import *
