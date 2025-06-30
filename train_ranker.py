@@ -3,7 +3,7 @@ import torch
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 import argparse
-from datasets import DATASETS
+from datasets_llamarec import DATASETS
 from config import *
 from model import *
 from dataloader import *
