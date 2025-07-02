@@ -12,4 +12,5 @@ datasets>=2.12.0  # for data loading
 huggingface_hub>=0.16.4  # for model and dataset loading
 sentencepiece  # for tokenization
 yacs  # for configuration management
-pytorch-lightning>=2.0.0  # for training framework 
+pytorch-lightning>=2.0.0  # for training framework
+tensorboard>=2.12.0  # for experiment tracking 

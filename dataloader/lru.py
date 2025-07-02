@@ -9,8 +9,12 @@ import torch.utils.data as data_utils
 
 
 def worker_init_fn(worker_id):
-    random.seed(np.random.get_state()[1][0] + worker_id)                                                      
-    np.random.seed(np.random.get_state()[1][0] + worker_id)
+    # Get a seed from numpy's random state and convert it to an integer
+    worker_seed = np.random.randint(np.iinfo(np.int32).max)
+    # Use the worker_id to make each worker have a different seed
+    random.seed(worker_seed + worker_id)
+    np.random.seed(worker_seed + worker_id)
+    torch.manual_seed(worker_seed + worker_id)
 
 
 class LRUDataloader():
