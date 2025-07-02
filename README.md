@@ -1,11 +1,30 @@
 # LlamaRec: Two-Stage Recommendation using Large Language Models for Ranking
 
-This repository is the PyTorch impelementation for the PGAI@CIKM 2023 paper **LlamaRec: Two-Stage Recommendation using Large Language Models for Ranking [[Paper](https://arxiv.org/abs/2311.02089)]**.
+This repository is the PyTorch impelementation for the CIKM 2023 paper **LlamaRec: Two-Stage Recommendation using Large Language Models for Ranking [[Paper](https://arxiv.org/abs/2311.02089)]**.
+
+This fork extends the original work to evaluate LlamaRec's performance on the Amazon 2023 dataset, providing additional benchmarks and insights on a more recent e-commerce dataset.
 
 <img src=media/method.png width=1000>
 
 We propose a two-stage framework using large language models for ranking-based recommendation (LlamaRec). In particular, we use small-scale sequential recommenders to retrieve candidates based on the user interaction history. Then, both history and retrieved items are fed to the LLM in text via a carefully designed prompt template. Instead of generating next-item titles, we adopt a verbalizer-based approach that transforms output logits into probability distributions over the candidate items. Therefore, LlamaRec can efficiently rank items without generating long text and achieve superior performance in both recommendation performance and efficiency.
 
+## Amazon 2023 Dataset
+
+To use the Amazon 2023 dataset with this implementation:
+
+1. Run the preprocessing script to prepare the dataset:
+```bash
+python datasets_llamarec/preprocess_amazon_datasers_2023.py
+```
+
+This script will:
+- Download the dataset from HuggingFace Hub
+- Create user and item ID mappings
+- Process train/validation/test splits
+- Generate the necessary data structures
+- Save the preprocessed dataset in pickle format
+
+The preprocessed data will be saved in the configured output directory (default: `data/preprocessed/small_beauty_2023_min_rating0-min_uc5-min_sc5`).
 
 ## Requirements
 
