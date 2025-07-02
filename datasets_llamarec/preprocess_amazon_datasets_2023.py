@@ -14,10 +14,13 @@ logger = logging.getLogger(__name__)
 
 def get_config(dataset_name: str) -> Dict[str, str]:
     """Get configuration based on dataset name."""
+    # Keep original dataset name for subset (since it's case-sensitive in the repo)
+    # but use lowercase for local paths
+    dataset_name_lower = dataset_name.lower()
     return {
         "repo_id": "ChernovAndrei/reco-fm-data",
-        "subset": f"5core_last_out_w_his_{dataset_name}",
-        "output_dir": f"../data/preprocessed/{dataset_name}_2023_min_rating0-min_uc5-min_sc5",
+        "subset": f"5core_last_out_w_his_{dataset_name}",  # Keep original case for repo
+        "output_dir": f"../data/preprocessed/{dataset_name_lower}_2023_min_rating0-min_uc5-min_sc5",
         "output_filename": "dataset.pkl"
     }
 
