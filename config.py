@@ -26,7 +26,7 @@ def set_template(args):
         batch = 16 if args.dataset_code == 'ml-100k' else 36
         args.lora_micro_batch_size = batch
     else: 
-        batch = 16 if args.dataset_code == 'ml-100k' else 192
+        batch = 16 if args.dataset_code == 'ml-100k' else 128
 
     args.train_batch_size = batch
     args.val_batch_size = batch
