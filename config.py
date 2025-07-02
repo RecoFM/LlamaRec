@@ -79,7 +79,7 @@ parser.add_argument('--negative_sample_size', type=int, default=10)
 ################
 # optimization #
 parser.add_argument('--device', type=str, default='cuda', choices=['cpu', 'cuda'])
-parser.add_argument('--num_epochs', type=int, default=500)
+parser.add_argument('--num_epochs', type=int, default=100)
 parser.add_argument('--optimizer', type=str, default='AdamW', choices=['AdamW', 'Adam'])
 parser.add_argument('--weight_decay', type=float, default=None)
 parser.add_argument('--adam_epsilon', type=float, default=1e-9)
@@ -94,9 +94,9 @@ parser.add_argument('--warmup_steps', type=int, default=100)
 
 # evaluation #
 parser.add_argument('--val_strategy', type=str, default='iteration', choices=['epoch', 'iteration'])
-parser.add_argument('--val_iterations', type=int, default=500)  # only for iteration val_strategy
+parser.add_argument('--val_iterations', type=int, default=5000)  # only for iteration val_strategy
 parser.add_argument('--early_stopping', type=bool, default=True)
-parser.add_argument('--early_stopping_patience', type=int, default=20)
+parser.add_argument('--early_stopping_patience', type=int, default=10)
 parser.add_argument('--metric_ks', nargs='+', type=int, default=[1, 5, 10, 20, 50])
 parser.add_argument('--rerank_metric_ks', nargs='+', type=int, default=[1, 5, 10])
 parser.add_argument('--best_metric', type=str, default='Recall@10')
