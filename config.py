@@ -28,7 +28,7 @@ def set_template(args):
     else:
         if args.dataset_code == 'ml-100k':
             batch = 16
-        elif args.dataset_code == 'toys_and_games_2023':
+        elif args.dataset_code in ['toys_and_games_2023', 'beauty_and_personal_care_2023']:
             batch = 96
         else:
             batch = 128
