@@ -83,4 +83,4 @@ class ToysAndGames2023Dataset(Dataset2023):
 class BeautyAndPersonalCare2023Dataset(Dataset2023):
     @classmethod
     def code(cls):
-        return 'Beauty_and_Personal_Care_2023'
+        return 'beauty_and_personal_care_2023'
