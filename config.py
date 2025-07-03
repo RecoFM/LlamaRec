@@ -79,7 +79,7 @@ parser.add_argument('--negative_sample_size', type=int, default=10)
 ################
 # optimization #
 parser.add_argument('--device', type=str, default='cuda', choices=['cpu', 'cuda'])
-parser.add_argument('--num_epochs', type=int, default=200)
+parser.add_argument('--num_epochs', type=int, default=2)
 parser.add_argument('--optimizer', type=str, default='AdamW', choices=['AdamW', 'Adam'])
 parser.add_argument('--weight_decay', type=float, default=None)
 parser.add_argument('--adam_epsilon', type=float, default=1e-9)
