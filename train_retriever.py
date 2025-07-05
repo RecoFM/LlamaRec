@@ -3,7 +3,6 @@ import torch
 os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
 import wandb
-import argparse
 
 from config import *
 from model import *
@@ -26,11 +25,29 @@ def main(args, export_root=None):
         export_root = EXPERIMENT_ROOT + '/' + args.model_code + '/' + args.dataset_code
     
     trainer = LRUTrainer(args, model, train_loader, val_loader, test_loader, export_root, args.use_wandb)
-    trainer.train()
-    trainer.test()
+    
+    if not args.generate_only:
+        trainer.train()
+        trainer.test()
+    else:
+        print('Loading best model for candidate generation...')
+        best_model_path = os.path.join(export_root, 'models', 'best_acc_model.pth')
+        if not os.path.exists(best_model_path):
+            raise FileNotFoundError(f"Best model checkpoint not found at {best_model_path}. Please train the model first.")
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        best_model_dict = torch.load(best_model_path, map_location=device).get(STATE_DICT_KEY)
+        model.load_state_dict(best_model_dict)
+        print(f'Model loaded successfully on {device}')
 
-    # the next line generates val / test candidates for reranking
-    trainer.generate_candidates(os.path.join(export_root, 'retrieved.pkl'))
+    # Generate candidates for reranking
+    retrieved_path = os.path.join(export_root, 'retrieved.pkl')
+    if os.path.exists(retrieved_path) and args.generate_only and not args.force_generate:
+        print(f'Retrieved candidates file already exists at {retrieved_path}')
+        print('Use --force_generate to regenerate candidates')
+    else:
+        print('Generating candidates...')
+        trainer.generate_candidates(retrieved_path)
+        print(f'Candidates saved to {retrieved_path}')
 
 
 if __name__ == "__main__":

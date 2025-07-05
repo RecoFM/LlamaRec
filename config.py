@@ -70,6 +70,12 @@ parser.add_argument('--min_sc', type=int, default=5)
 parser.add_argument('--seed', type=int, default=42)
 
 ################
+# Generation
+################
+parser.add_argument('--generate_only', action='store_true', default=False, help='Only generate candidates without training')
+parser.add_argument('--force_generate', action='store_true', default=False, help='Force regenerate candidates even if file exists')
+
+################
 # Dataloader
 ################
 parser.add_argument('--train_batch_size', type=int, default=64)
