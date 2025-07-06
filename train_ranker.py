@@ -44,6 +44,7 @@ def main(args, export_root=None):
         quantization_config=bnb_config,
         device_map='auto',
         cache_dir=args.llm_cache_dir,
+        trust_remote_code=True,
     )
     model.gradient_checkpointing_enable()
     model = prepare_model_for_kbit_training(model)
