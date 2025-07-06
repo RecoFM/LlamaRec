@@ -31,7 +31,21 @@ def ndcg(scores, labels, k):
 
 def absolute_recall_mrr_ndcg_for_ks(scores, labels, ks):
     metrics = {}
-    labels = F.one_hot(labels, num_classes=scores.size(1))
+    
+    # Get the actual indices from scores that correspond to the labels
+    scores_indices = torch.arange(scores.size(1), device=scores.device)
+    labels_mapped = torch.zeros_like(labels)
+    
+    # For each label, find its position in the scores array
+    for i, label in enumerate(labels):
+        label_pos = (scores_indices == label).nonzero()
+        if len(label_pos) > 0:
+            labels_mapped[i] = label_pos[0]
+        else:
+            labels_mapped[i] = 0  # If label not found, map to padding index
+    
+    # Create one-hot encoding using mapped labels
+    labels = F.one_hot(labels_mapped, num_classes=scores.size(1))
     answer_count = labels.sum(1)
 
     labels_float = labels.float()
