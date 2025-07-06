@@ -48,7 +48,7 @@ def set_template(args):
     args.enable_lr_warmup = False
     args.warmup_steps = 100
 
-    args.metric_ks = [1, 5, 10, 20, 50]
+    args.metric_ks = [1, 5, 10]
     args.rerank_metric_ks = [1, 5, 10]
     args.best_metric = 'Recall@10'
     args.rerank_best_metric = 'NDCG@10'
