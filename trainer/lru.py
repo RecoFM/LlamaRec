@@ -44,7 +44,7 @@ class LRUTrainer(BaseTrainer):
         self.model.eval()
         val_probs, val_labels = [], []
         test_probs, test_labels = [], []
-        TOP_K = 100  # Number of candidates to keep
+        TOP_K = 50  # Number of candidates to keep
         
         with torch.no_grad():
             print('*************** Generating Candidates for Validation Set ***************')
