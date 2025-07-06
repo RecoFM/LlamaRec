@@ -44,7 +44,13 @@ class LRUTrainer(BaseTrainer):
         self.model.eval()
         val_probs, val_labels = [], []
         test_probs, test_labels = [], []
-        TOP_K = 50  # Number of candidates to keep
+        TOP_K = 20  # Number of candidates to keep
+        
+        # Initialize metric accumulators
+        val_metric_sums = {}
+        val_metric_counts = 0
+        test_metric_sums = {}
+        test_metric_counts = 0
         
         with torch.no_grad():
             print('*************** Generating Candidates for Validation Set ***************')
@@ -62,12 +68,21 @@ class LRUTrainer(BaseTrainer):
                 # Get top k scores and indices
                 top_scores, _ = torch.topk(scores, k=min(TOP_K, scores.size(1)), dim=1)
                 # Convert to sparse format - only store top k scores
-                val_probs.extend(top_scores.tolist())
-                val_labels.extend(labels.view(-1).tolist())
-            
-            # Calculate metrics using full scores for accurate evaluation
-            val_metrics = absolute_recall_mrr_ndcg_for_ks(scores, 
-                                                          torch.tensor(val_labels).view(-1), self.metric_ks)
+                val_probs.extend(top_scores.cpu().tolist())
+                val_labels.extend(labels.view(-1).cpu().tolist())
+                
+                # Calculate metrics for this batch
+                batch_metrics = absolute_recall_mrr_ndcg_for_ks(scores, labels.view(-1), self.metric_ks)
+                
+                # Accumulate metrics
+                for metric_name, value in batch_metrics.items():
+                    if metric_name not in val_metric_sums:
+                        val_metric_sums[metric_name] = 0.0
+                    val_metric_sums[metric_name] += value
+                val_metric_counts += 1
+
+            # Average the metrics
+            val_metrics = {k: v / val_metric_counts for k, v in val_metric_sums.items()}
             print(val_metrics)
 
             print('****************** Generating Candidates for Test Set ******************')
@@ -85,12 +100,21 @@ class LRUTrainer(BaseTrainer):
                 # Get top k scores and indices
                 top_scores, _ = torch.topk(scores, k=min(TOP_K, scores.size(1)), dim=1)
                 # Convert to sparse format - only store top k scores
-                test_probs.extend(top_scores.tolist())
-                test_labels.extend(labels.view(-1).tolist())
-            
-            # Calculate metrics using full scores for accurate evaluation
-            test_metrics = absolute_recall_mrr_ndcg_for_ks(scores,
-                                                           torch.tensor(test_labels).view(-1), self.metric_ks)
+                test_probs.extend(top_scores.cpu().tolist())
+                test_labels.extend(labels.view(-1).cpu().tolist())
+                
+                # Calculate metrics for this batch
+                batch_metrics = absolute_recall_mrr_ndcg_for_ks(scores, labels.view(-1), self.metric_ks)
+                
+                # Accumulate metrics
+                for metric_name, value in batch_metrics.items():
+                    if metric_name not in test_metric_sums:
+                        test_metric_sums[metric_name] = 0.0
+                    test_metric_sums[metric_name] += value
+                test_metric_counts += 1
+
+            # Average the metrics
+            test_metrics = {k: v / test_metric_counts for k, v in test_metric_sums.items()}
             print(test_metrics)
 
         with open(retrieved_data_path, 'wb') as f:
