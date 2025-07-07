@@ -1,3 +1,4 @@
+Cython==0.29.35
 absl-py==1.4.0
 accelerate==0.21.0
 aiofiles==23.1.0
